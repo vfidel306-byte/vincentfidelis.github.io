@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StreamFlix - Watch Movies and Series Online</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header class="navbar navbar-showcase">
+        <div class="container">
+            <div class="navbar-brand">
+                <a href="index.html"><span class="brand-mark" aria-hidden="true"></span>StreamFlix</a>
+            </div>
+
+            <button class="nav-toggle" type="button" data-nav-toggle aria-controls="primary-nav" aria-expanded="false" aria-label="Open menu">
+                <span class="bars" aria-hidden="true"></span>
+            </button>
+
+            <nav class="navbar-nav" id="primary-nav">
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="movies.php" class="btn btn-primary btn-sm" style="margin-left: 10px;">Browse Library</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="showcase-hero">
+            <!-- Global Movie Poster Infinite Scroll Background -->
+            <div class="movie-poster-scroll">
+                <div class="poster-track dyn-track">
+                    <!-- Posters injected by JS -->
+                </div>
+                <div class="poster-track reverse dyn-track">
+                    <!-- Posters injected by JS -->
+                </div>
+                <div class="bg-overlay"></div>
+            </div>
+
+            <div class="showcase-content" style="max-width: 800px; margin: 0 auto; text-align: center; padding: 0 20px;">
+                <h1 class="showcase-title">StreamFlix</h1>
+                <p class="showcase-subtitle">Experience Cinema Like Never Before</p>
+                <div class="showcase-actions">
+                    <a href="movies.php" class="btn btn-primary btn-xl">Enter Library</a>
+                    <a href="login.html" class="btn btn-ghost btn-xl" style="margin-left: 15px;">Sign In</a>
+                </div>
+            </div>
+
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 StreamFlix. Cinematic Excellence.</p>
+        </div>
+    </footer>
+
+    <script src="js/script.js?v=1.1"></script>
+</body>
+</html>

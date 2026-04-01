@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StreamFlix - Register</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body style="background: #05070a;">
+    <header class="navbar navbar-showcase">
+        <div class="container">
+            <div class="navbar-brand">
+                <a href="index.html"><span class="brand-mark" aria-hidden="true"></span>StreamFlix</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="auth-hero">
+            <!-- Global Movie Poster Infinite Scroll Background -->
+            <div class="movie-poster-scroll">
+                <div class="poster-track dyn-track">
+                    <!-- Posters injected by JS -->
+                </div>
+                <div class="poster-track reverse dyn-track">
+                    <!-- Posters injected by JS -->
+                </div>
+                <div class="bg-overlay"></div>
+            </div>
+
+            <div class="container container-auth">
+                <div class="auth-brand">
+                    <h1 class="brand-name" style="font-size: 2.5rem;">StreamFlix</h1>
+                </div>
+
+                <!-- Register View -->
+                <div class="auth-card form-container glass-panel active" id="register-section">
+                    <h2>Join StreamFlix</h2>
+                    <p class="helper">Create an account and start watching.</p>
+                    <div class="alert" id="register-error" style="display:none;"></div>
+                    <form action="api/register.php" method="POST">
+                        <div class="field">
+                            <label class="label">Username</label>
+                            <input type="text" name="username" placeholder="yourname" required>
+                        </div>
+                        <div class="field">
+                            <label class="label">Email</label>
+                            <input type="email" name="email" placeholder="you@example.com" required>
+                        </div>
+                        <div class="field">
+                            <label class="label">Password</label>
+                            <input type="password" name="password" placeholder="At least 6 characters" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-full">Register</button>
+                    </form>
+                    <p class="small">Already have an account? <a href="login.html">Sign in instead</a>.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        window.addEventListener('load', () => {
+             const urlParams = new URLSearchParams(window.location.search);
+             if (urlParams.get('username_err') || urlParams.get('email_err_reg')) {
+                 const el = document.getElementById('register-error');
+                 el.textContent = [urlParams.get('username_err'), urlParams.get('email_err_reg')].filter(Boolean).join(' ');
+                 el.style.display = 'block';
+             }
+        });
+    </script>
+    <script src="js/script.js"></script>
+</body>
+</html>

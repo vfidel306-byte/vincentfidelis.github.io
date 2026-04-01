@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Watch - StreamFlix</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header class="navbar">
+        <div class="container">
+            <div class="navbar-brand">
+                <a href="movies.php"><span class="brand-mark" aria-hidden="true"></span>StreamFlix</a>
+            </div>
+
+            <button class="nav-toggle" type="button" data-nav-toggle aria-controls="primary-nav" aria-expanded="false" aria-label="Open menu">
+                <span class="bars" aria-hidden="true"></span>
+            </button>
+
+            <nav class="navbar-nav" id="primary-nav">
+                <ul>
+                    <li><a href="movies.php">Home</a></li>
+                    <li><a href="movies.php">Movies</a></li>
+                    <li><a href="profile.php">Profile</a></li>
+                    <li><a href="api/logout.php">Logout</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="watch-section">
+            <div class="container-fluid" style="padding: 20px; max-width: 1600px; margin: 0 auto;">
+                <div class="watch-layout">
+                    <!-- Main Player Area -->
+                    <div class="player-main">
+                        <div class="player-shell glass-panel">
+                            <div id="player-container" style="width: 100%; aspect-ratio: 16/9; background: #000; overflow: hidden; border-radius: 20px 20px 0 0;">
+                                <!-- Player will be dynamically injected by JS -->
+                                <div style="display: flex; align-items: center; justify-content: center; height: 100%; color: var(--muted);">
+                                    Initializing Secure Stream...
+                                </div>
+                            </div>
+                            <div class="video-info" style="padding: 25px;">
+                                <h1 id="video-title" style="font-size: 2rem; font-weight: 800; margin-bottom: 8px;">Loading…</h1>
+                                <p id="video-description" style="color: var(--muted); line-height: 1.6; font-size: 1.1rem;">Please wait while we fetch the stream.</p>
+                                <div style="margin-top: 20px;">
+                                    <a id="download-btn" href="#" class="btn" style="display: none; align-items: center; justify-content: center; gap: 10px; width: fit-content; text-decoration: none; background: #28a745; color: white; padding: 12px 24px; border-radius: 8px; font-weight: bold; transition: background 0.2s, transform 0.2s; box-shadow: 0 4px 15px rgba(40, 167, 69, 0.4);" onmouseover="this.style.transform='translateY(-2px)';" onmouseout="this.style.transform='translateY(0)';">
+                                        <svg id="download-icon" width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+                                        <svg id="download-spinner" width="20" height="20" viewBox="0 0 24 24" style="display: none;" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                            <style>@keyframes spin-anim { to { transform: rotate(360deg); } }</style>
+                                            <g style="transform-origin: center; animation: spin-anim 1s linear infinite">
+                                                <circle cx="12" cy="12" r="10" stroke-opacity="0.25"></circle>
+                                                <path d="M12 2a10 10 0 0 1 10 10"></path>
+                                            </g>
+                                        </svg>
+                                        <span id="download-text">Download Video</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sidebar Area -->
+                    <aside class="episode-sidebar glass-panel" id="episode-sidebar" style="display: none;">
+                        <div class="sidebar-header">
+                            <h3>Episodes</h3>
+                            <select id="season-select" class="season-dropdown">
+                                <!-- Seasons populated by JS -->
+                            </select>
+                        </div>
+                        <div id="episodes-list" class="sidebar-episodes-list">
+                            <!-- Episodes populated by JS -->
+                        </div>
+                    </aside>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 StreamFlix. All rights reserved.</p>
+            <p>Enjoy the show.</p>
+        </div>
+    </footer>
+
+    <script src="js/script.js?v=1.1"></script>
+</body>
+</html>

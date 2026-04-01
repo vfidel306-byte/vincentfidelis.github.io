@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StreamFlix - All Series</title>
+    <meta name="description" content="Browse and stream TV shows by genre on StreamFlix.">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* ── Genre Tabs ── */
+        .genre-tabs-wrap {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 52px;
+            padding: 6px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.07);
+            border-radius: 16px;
+            width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .genre-tab {
+            padding: 8px 20px;
+            border-radius: 10px;
+            border: none;
+            background: transparent;
+            color: rgba(255,255,255,0.45);
+            font-size: 0.78rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.18s ease;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+        .genre-tab:hover {
+            color: #fff;
+            background: rgba(255,255,255,0.06);
+        }
+        .genre-tab.active {
+            background: var(--brand);
+            color: #fff;
+            box-shadow: 0 2px 12px rgba(229,9,20,0.4);
+        }
+
+        /* ── Genre Sections ── */
+        .genre-section { margin-bottom: 60px; }
+        .genre-section-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 8px;
+        }
+        .genre-section-title {
+            font-size: 0.7rem;
+            font-weight: 800;
+            color: rgba(255,255,255,0.35);
+            margin: 0;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+        }
+        .genre-badge {
+            font-size: 0.68rem;
+            font-weight: 700;
+            background: rgba(229,9,20,0.12);
+            border: 1px solid rgba(229,9,20,0.2);
+            color: var(--brand);
+            padding: 2px 10px;
+            border-radius: 20px;
+            letter-spacing: 0.04em;
+        }
+        .genre-divider {
+            height: 1px;
+            background: linear-gradient(to right, rgba(229,9,20,0.25), rgba(255,255,255,0.04));
+            margin-bottom: 24px;
+        }
+
+        /* ── Loading Skeleton ── */
+        .skeleton-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 16px;
+        }
+        .skeleton-card {
+            aspect-ratio: 2/3;
+            border-radius: 12px;
+            background: linear-gradient(90deg,rgba(255,255,255,0.04) 25%,rgba(255,255,255,0.08) 50%,rgba(255,255,255,0.04) 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.4s infinite;
+        }
+        @keyframes shimmer { to { background-position: -200% 0; } }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* ── All-genres view ── */
+        #all-genres-view .genre-section { display: block; }
+        #filtered-view { display: none; }
+    </style>
+</head>
+<body style="background: #05070a;">
+    <header class="navbar navbar-showcase">
+        <div class="container">
+            <div class="navbar-brand">
+                <a href="movies.php"><span class="brand-mark" aria-hidden="true"></span>StreamFlix</a>
+            </div>
+
+            <button class="nav-toggle" type="button" data-nav-toggle aria-controls="primary-nav" aria-expanded="false" aria-label="Open menu">
+                <span class="bars" aria-hidden="true"></span>
+            </button>
+
+            <nav class="navbar-nav" id="primary-nav">
+                <ul>
+                    <li><a href="movies.php">Home</a></li>
+                    <li><a href="movies.php">Movies</a></li>
+                    <li><a href="series.html">Series</a></li>
+                    <li><a href="profile.php">Profile</a></li>
+                    <li><a href="api/logout.php">Logout</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="section" style="padding-top: 120px;">
+            <div class="container">
+
+                <!-- Header -->
+                <div class="section-header" style="text-align: center; margin-bottom: 40px;">
+                    <h1 style="font-size: 3rem; font-weight: 900; letter-spacing: -0.02em;">All Series</h1>
+                    <p style="color: var(--muted);">Find your next binge.</p>
+                </div>
+
+                <!-- Search Bar -->
+                <div class="search-bar" style="max-width: 600px; margin: 0 auto 40px;">
+                    <form id="search-form" style="display: flex; gap: 10px;">
+                        <input type="text" id="search-input" placeholder="Search titles, descriptions..." style="height: 54px; border-radius: 27px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding-left: 25px;">
+                        <button type="submit" class="btn btn-primary" style="height: 54px; border-radius: 27px; padding: 0 30px;">Search</button>
+                    </form>
+                </div>
+
+                <!-- Genre Filter Tabs -->
+                <div class="genre-tabs-wrap" id="genre-tabs">
+                    <button class="genre-tab active" data-genre="All">All</button>
+                    <button class="genre-tab" data-genre="Action">Action</button>
+                    <button class="genre-tab" data-genre="Comedy">Comedy</button>
+                    <button class="genre-tab" data-genre="Drama">Drama</button>
+                    <button class="genre-tab" data-genre="Horror">Horror</button>
+                    <button class="genre-tab" data-genre="Sci-Fi">Sci-Fi</button>
+                    <button class="genre-tab" data-genre="Romance">Romance</button>
+                    <button class="genre-tab" data-genre="Thriller">Thriller</button>
+                    <button class="genre-tab" data-genre="Animation">Animation</button>
+                    <button class="genre-tab" data-genre="Documentary">Documentary</button>
+                    <button class="genre-tab" data-genre="Other">Other</button>
+                </div>
+
+                <!-- All-genres grouped view (default) -->
+                <div id="all-genres-view">
+                    <div id="loading-all" class="skeleton-grid">
+                        <div class="skeleton-card"></div>
+                        <div class="skeleton-card"></div>
+                        <div class="skeleton-card"></div>
+                        <div class="skeleton-card"></div>
+                        <div class="skeleton-card"></div>
+                        <div class="skeleton-card"></div>
+                        <div class="skeleton-card"></div>
+                        <div class="skeleton-card"></div>
+                    </div>
+                </div>
+
+                <!-- Single-genre filtered view -->
+                <div id="filtered-view">
+                    <div class="grid" id="series-grid"></div>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <footer style="background: #05070a; border-top: 1px solid rgba(255,255,255,0.05); margin-top: 80px;">
+        <div class="container">
+            <p>&copy; 2026 StreamFlix. Cinematic Experience.</p>
+        </div>
+    </footer>
+
+    <script src="js/script.js?v=2.1"></script>
+    <script>
+    (function () {
+        const GENRES = ['Action','Comedy','Drama','Horror','Sci-Fi','Romance','Thriller','Animation','Documentary','Other'];
+
+        let allSeries = [];
+        let activeGenre = 'All';
+
+        const allView      = document.getElementById('all-genres-view');
+        const filteredView = document.getElementById('filtered-view');
+        const seriesGrid   = document.getElementById('series-grid');
+        const loadingAll   = document.getElementById('loading-all');
+
+        // ── Build a series card HTML ──
+        function seriesCard(series) {
+            const href = `series_details.html?id=${series.id}`;
+            return `
+                <div class="card">
+                    <a href="${href}">
+                        <img src="${series.poster_url}" alt="${series.title}" loading="lazy">
+                        ${series.is_premium == 1
+                            ? '<div style="position:absolute;top:10px;right:10px;background:var(--brand);padding:2px 8px;border-radius:4px;font-size:10px;font-weight:bold;">PREMIUM</div>'
+                            : ''}
+                        <div style="position:absolute;bottom:0;left:0;right:0;padding:12px 10px 10px;background:linear-gradient(transparent,rgba(0,0,0,0.85));opacity:0;transition:opacity 0.2s;" class="card-hover-label">
+                            <div style="font-size:0.78rem;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${series.title}</div>
+                            ${series.genre ? `<div style="font-size:0.68rem;color:rgba(255,255,255,0.5);margin-top:2px;">${series.genre}</div>` : ''}
+                        </div>
+                    </a>
+                </div>`;
+        }
+
+        // ── Render all genres grouped ──
+        function renderAllGenres(series) {
+            allView.innerHTML = '';
+
+            if (!series || series.length === 0) {
+                allView.innerHTML = `
+                    <div style="text-align:center;padding:80px 20px;color:var(--muted);">
+                        <p style="font-size:1.1rem;">No series in the library yet. Add some from the <a href="admin/dashboard.php" style="color:var(--brand);">admin panel</a>.</p>
+                    </div>`;
+                return;
+            }
+
+            // Group by genre
+            const grouped = {};
+            series.forEach(s => {
+                const g = s.genre || 'Other';
+                if (!grouped[g]) grouped[g] = [];
+                grouped[g].push(s);
+            });
+
+            GENRES.forEach(genre => {
+                if (!grouped[genre] || grouped[genre].length === 0) return;
+                const section = document.createElement('div');
+                section.className = 'genre-section';
+                section.id = `genre-section-${genre.replace(/\s+/g,'-')}`;
+                section.innerHTML = `
+                    <div class="genre-section-header">
+                        <h2 class="genre-section-title">${genre}</h2>
+                        <span class="genre-badge">${grouped[genre].length} title${grouped[genre].length !== 1 ? 's' : ''}</span>
+                    </div>
+                    <div class="genre-divider"></div>
+                    <div class="grid">${grouped[genre].map(seriesCard).join('')}</div>
+                `;
+                allView.appendChild(section);
+            });
+
+            // Handle hover labels
+            allView.querySelectorAll('.card').forEach(card => {
+                const label = card.querySelector('.card-hover-label');
+                if (!label) return;
+                card.addEventListener('mouseenter', () => label.style.opacity = '1');
+                card.addEventListener('mouseleave', () => label.style.opacity = '0');
+            });
+        }
+
+        // ── Render filtered single genre ──
+        function renderFiltered(seriesList, genre) {
+            seriesGrid.innerHTML = '';
+            if (!seriesList || seriesList.length === 0) {
+                seriesGrid.innerHTML = `
+                    <div style="
+                        grid-column: 1 / -1;
+                        display: flex; flex-direction: column;
+                        align-items: center; justify-content: center;
+                        padding: 80px 20px; text-align: center;">
+                        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1.5" style="margin-bottom:20px;">
+                            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                        </svg>
+                        <h3 style="font-size:1.4rem;font-weight:700;color:#fff;margin:0 0 10px;">No ${genre} series yet</h3>
+                        <p style="color:var(--muted);font-size:0.95rem;max-width:360px;line-height:1.6;margin:0 0 24px;">
+                            We haven't added any <strong style="color:var(--brand);">${genre}</strong> series to the library yet.
+                            Check back soon or browse another genre.
+                        </p>
+                        <button id="back-to-all-btn" class="btn btn-primary" style="border-radius:25px;padding:10px 28px;">Browse All Series</button>
+                    </div>`;
+                document.getElementById('back-to-all-btn')?.addEventListener('click', () => switchGenre('All'));
+                return;
+            }
+            seriesGrid.innerHTML = seriesList.map(seriesCard).join('');
+
+            // Hover labels
+            seriesGrid.querySelectorAll('.card').forEach(card => {
+                const label = card.querySelector('.card-hover-label');
+                if (!label) return;
+                card.addEventListener('mouseenter', () => label.style.opacity = '1');
+                card.addEventListener('mouseleave', () => label.style.opacity = '0');
+            });
+        }
+
+        // ── Switch genre tab ──
+        function switchGenre(genre) {
+            activeGenre = genre;
+
+            // Update tabs
+            document.querySelectorAll('.genre-tab').forEach(t => {
+                t.classList.toggle('active', t.dataset.genre === genre);
+            });
+
+            if (genre === 'All') {
+                allView.style.display = 'block';
+                filteredView.style.display = 'none';
+                renderAllGenres(allSeries);
+            } else {
+                allView.style.display = 'none';
+                filteredView.style.display = 'block';
+                const filtered = allSeries.filter(s => (s.genre || 'Other') === genre);
+                renderFiltered(filtered, genre);
+            }
+        }
+
+        // ── Initial load ──
+        fetch('api/series.php', { credentials: 'same-origin' })
+            .then(r => r.json())
+            .then(series => {
+                allSeries = Array.isArray(series) ? series : [];
+                renderAllGenres(allSeries);
+            })
+            .catch(() => {
+                loadingAll && (loadingAll.innerHTML = '<p style="color:#ff5252;text-align:center;padding:40px;">Failed to load series.</p>');
+            });
+
+        // ── Tab click events ──
+        document.getElementById('genre-tabs').addEventListener('click', e => {
+            const tab = e.target.closest('.genre-tab');
+            if (!tab) return;
+            switchGenre(tab.dataset.genre);
+        });
+
+        // ── Search override: filter locally first for instant UX ──
+        document.getElementById('search-form').addEventListener('submit', e => {
+            e.preventDefault();
+            const query = document.getElementById('search-input').value.trim().toLowerCase();
+            if (!query) { switchGenre('All'); return; }
+
+            // Switch to "All" view and filter in-memory
+            document.querySelectorAll('.genre-tab').forEach(t => t.classList.remove('active'));
+            allView.style.display = 'none';
+            filteredView.style.display = 'block';
+
+            const results = allSeries.filter(s =>
+                s.title.toLowerCase().includes(query) ||
+                (s.description && s.description.toLowerCase().includes(query)) ||
+                (s.genre && s.genre.toLowerCase().includes(query))
+            );
+
+            seriesGrid.innerHTML = '';
+            if (results.length === 0) {
+                seriesGrid.innerHTML = `
+                    <div style="
+                        grid-column: 1 / -1;
+                        display: flex; flex-direction: column;
+                        align-items: center; justify-content: center;
+                        padding: 80px 20px; text-align: center;">
+                        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1.5" style="margin-bottom:20px;">
+                            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                            <line x1="8" y1="11" x2="14" y2="11" stroke-dasharray="2 2"/>
+                        </svg>
+                        <h3 style="font-size:1.4rem;font-weight:700;color:#fff;margin:0 0 10px;">No results found</h3>
+                        <p style="color:var(--muted);font-size:0.95rem;max-width:380px;line-height:1.6;margin:0 0 24px;">
+                            We couldn't find any series matching
+                            <strong style="color:var(--brand);">"${document.getElementById('search-input').value.trim()}"</strong>.
+                            Try a different title or check your spelling.
+                        </p>
+                        <button id="search-reset-btn" class="btn btn-primary" style="border-radius:25px;padding:10px 28px;">Browse All Series</button>
+                    </div>`;
+                document.getElementById('search-reset-btn').addEventListener('click', () => {
+                    document.getElementById('search-input').value = '';
+                    switchGenre('All');
+                });
+            } else {
+                seriesGrid.innerHTML = results.map(seriesCard).join('');
+                seriesGrid.querySelectorAll('.card').forEach(card => {
+                    const label = card.querySelector('.card-hover-label');
+                    if (!label) return;
+                    card.addEventListener('mouseenter', () => label.style.opacity = '1');
+                    card.addEventListener('mouseleave', () => label.style.opacity = '0');
+                });
+            }
+        });
+    })();
+    </script>
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StreamFlix - Recover Password</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body style="background: #05070a;">
+    <header class="navbar navbar-showcase">
+        <div class="container">
+            <div class="navbar-brand">
+                <a href="index.html"><span class="brand-mark" aria-hidden="true"></span>StreamFlix</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="auth-hero">
+            <!-- Global Movie Poster Infinite Scroll Background -->
+            <div class="movie-poster-scroll">
+                <div class="poster-track dyn-track">
+                    <!-- Posters injected by JS -->
+                </div>
+                <div class="poster-track reverse dyn-track">
+                    <!-- Posters injected by JS -->
+                </div>
+                <div class="bg-overlay"></div>
+            </div>
+
+            <div class="container container-auth">
+                <div class="auth-brand">
+                    <h1 class="brand-name" style="font-size: 2.5rem;">StreamFlix</h1>
+                </div>
+
+                <!-- Recovery View -->
+                <div class="auth-card form-container glass-panel active" id="recover-section">
+                    <h2>Recover Access</h2>
+                    <p class="helper">Enter your email to receive a recovery link.</p>
+                    <div class="alert" id="recover-message" style="display:none;"></div>
+                    <div class="field">
+                        <label class="label">Email Address</label>
+                        <input type="email" id="recover-email" placeholder="you@example.com" required>
+                    </div>
+                    <button type="button" class="btn btn-primary btn-full" onclick="processRecovery()">Send Link</button>
+                    <p class="small">Remembered? <a href="login.html">Back to login</a>.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        async function processRecovery() {
+            const email = document.getElementById('recover-email').value;
+            const msgEl = document.getElementById('recover-message');
+            if (!email) return alert('Please enter your email.');
+            
+            msgEl.textContent = 'Processing...';
+            msgEl.style.display = 'block';
+            msgEl.className = 'alert';
+
+            try {
+                const response = await fetch('api/recover_password.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email })
+                });
+                const result = await response.json();
+                msgEl.textContent = result.message || result.error;
+                msgEl.style.backgroundColor = result.success ? 'rgba(40,167,69,0.2)' : 'rgba(229,9,20,0.1)';
+                msgEl.style.color = result.success ? '#28a745' : 'var(--brand)';
+            } catch (e) {
+                msgEl.textContent = 'Server connection error.';
+            }
+        }
+    </script>
+    <script src="js/script.js"></script>
+</body>
+</html>

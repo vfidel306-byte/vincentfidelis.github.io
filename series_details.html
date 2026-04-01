@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Series Details - StreamFlix</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .details-hero {
+            position: relative;
+            padding: 100px 0 60px;
+            min-height: 500px;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+        }
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            z-index: -1;
+            background-size: cover;
+            background-position: center;
+            filter: blur(40px) brightness(0.3);
+            transform: scale(1.1);
+        }
+        .details-grid {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 50px;
+            position: relative;
+            z-index: 10;
+        }
+        .details-poster img {
+            width: 100%;
+            border-radius: 20px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.8);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .details-info h1 {
+            font-size: 4rem;
+            margin: 0 0 15px;
+            font-weight: 900;
+            letter-spacing: -0.04em;
+        }
+        .details-info p {
+            font-size: 1.25rem;
+            color: var(--muted);
+            line-height: 1.6;
+            max-width: 800px;
+        }
+        .badge {
+            display: inline-block;
+            padding: 6px 12px;
+            background: var(--brand);
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 800;
+            margin-right: 10px;
+        }
+
+        .episode-browser {
+            padding: 60px 0;
+            background: rgba(0,0,0,0.2);
+        }
+        .season-tabs {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            border-bottom: 1px solid var(--stroke);
+            padding-bottom: 15px;
+        }
+        .season-tab {
+            padding: 10px 20px;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.05);
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.2s;
+            border: 1px solid transparent;
+        }
+        .season-tab.active {
+            background: var(--brand);
+            color: #fff;
+        }
+        .episode-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        .ep-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            padding: 20px;
+            border: 1px solid var(--stroke);
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .ep-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255,255,255,0.08);
+            border-color: rgba(255,255,255,0.2);
+        }
+        .ep-card h4 {
+            margin: 0 0 10px;
+            font-size: 1.1rem;
+        }
+        .ep-card .meta {
+            color: var(--brand);
+            font-weight: 800;
+            font-size: 0.8rem;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+
+        @media (max-width: 900px) {
+            .details-grid { grid-template-columns: 1fr; text-align: center; }
+            .details-poster { max-width: 240px; margin: 0 auto; }
+            .details-info h1 { font-size: 2.5rem; }
+            .details-info p { font-size: 1.1rem; }
+        }
+    </style>
+</head>
+<body>
+    <header class="navbar">
+        <div class="container">
+            <div class="navbar-brand">
+                <a href="movies.php"><span class="brand-mark" aria-hidden="true"></span>StreamFlix</a>
+            </div>
+            <nav class="navbar-nav">
+                <ul>
+                    <li><a href="movies.php">Home</a></li>
+                    <li><a href="series.html">Series</a></li>
+                    <li><a href="profile.php">Profile</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section id="details-section" style="display: none;">
+            <!-- Hero Section -->
+            <div class="details-hero">
+                <div id="hero-bg" class="hero-bg"></div>
+                <div class="container">
+                    <div class="details-grid">
+                        <div class="details-poster">
+                            <img id="series-poster" src="" alt="">
+                        </div>
+                        <div class="details-info">
+                            <div id="badges-container"></div>
+                            <h1 id="series-title">Loading...</h1>
+                            <p id="series-description"></p>
+                            <div style="margin-top: 30px;">
+                                <button id="play-first-btn" class="btn btn-primary btn-xl">Watch S1:E1</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Episodes Section -->
+            <div class="episode-browser">
+                <div class="container">
+                    <div class="section-header">
+                        <h2>Select Episode</h2>
+                        <p id="total-episodes-count"></p>
+                    </div>
+                    
+                    <div id="season-tabs" class="season-tabs">
+                        <!-- Season tabs populated by JS -->
+                    </div>
+
+                    <div id="episode-list" class="episode-grid">
+                        <!-- Episodes populated by JS -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div id="loading-spinner" style="padding: 100px; text-align: center;">
+            <div style="font-size: 1.5rem; color: var(--muted);">Fetching cinematic metadata...</div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 StreamFlix. Explore the binge.</p>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+</html>

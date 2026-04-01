@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download - StreamFlix</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header class="navbar">
+        <div class="container">
+            <div class="navbar-brand">
+                <a href="movies.php"><span class="brand-mark" aria-hidden="true"></span>StreamFlix</a>
+            </div>
+
+            <button class="nav-toggle" type="button" data-nav-toggle aria-controls="primary-nav" aria-expanded="false" aria-label="Open menu">
+                <span class="bars" aria-hidden="true"></span>
+            </button>
+
+            <nav class="navbar-nav" id="primary-nav">
+                <ul>
+                    <li><a href="movies.php">Home</a></li>
+                    <li><a href="movies.html">Movies</a></li>
+                    <li><a href="series.html">Series</a></li>
+                    <li><a href="profile.html">Profile</a></li>
+                    <li><a href="api/logout.php">Logout</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="section">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Download</h2>
+                    <p>Save for offline viewing (demo).</p>
+                </div>
+                <!-- Download link will be dynamically generated here -->
+                <a href="#" class="btn btn-primary" id="download-link">Download</a>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 StreamFlix. All rights reserved.</p>
+            <p>Offline-ready.</p>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
